@@ -8,3 +8,7 @@ auth.db
 node_modules/
 dist/
 .pytest_cache/
+# Explicit environment variants
+.env.local
+.env.production
+*.env
