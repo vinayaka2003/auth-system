@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script
+        src="https://accounts.google.com/gsi/client"
+        async
+        defer>
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Login</h1>
+
+    <div class="input-group">
+        <input
+            id="email"
+            type="email"
+            autocomplete="email"
+            placeholder="Email">
+    </div>
+
+    <div class="input-group password-wrapper">
+
+        <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Password">
+
+        <button
+            type="button"
+            id="passwordToggle"
+            class="toggle-password"
+            onclick="togglePassword()"
+            aria-label="Toggle password">
+
+            <i
+                id="eyeIcon"
+                data-lucide="eye">
+            </i>
+
+        </button>
+
+    </div>
+
+    <button
+        id="loginBtn"
+        onclick="login()">
+        Login
+    </button>
+
+    <div
+        id="g_id_onload"
+        data-client_id="893702706174-p8ur1mrrpc84r29h3jsc56sq66koqqc2.apps.googleusercontent.com"
+        data-callback="handleGoogleLogin">
+    </div>
+
+    <div
+        class="g_id_signin"
+        data-type="standard">
+    </div>
+
+    <br><br>
+
+    <button onclick="guestLogin()">
+        Continue as Guest
+    </button>
+
+    <p>
+        <a href="forgot-password.html">
+            Forgot Password?
+        </a>
+    </p>
+
+    <p>
+        Don't have an account?
+        <a href="signup.html">
+            Signup
+        </a>
+    </p>
+
+</div>
+
+<script src="js/login.js"></script>
+
+<script>
+    lucide.createIcons();
+</script>
+
+</body>
+
+</html>
