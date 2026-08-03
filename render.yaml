@@ -3,9 +3,9 @@ services:
     name: auth-system-backend
     env: python
     plan: free
-    root: backend
-    buildCommand: pip install -r ../requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    root: .
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
 
   - type: static_site
