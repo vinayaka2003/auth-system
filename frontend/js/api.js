@@ -3,7 +3,7 @@
 // Automatically uses local backend when testing locally, or your deployed backend URL in production
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://127.0.0.1:8000'
-  : 'https://your-backend-api.onrender.com'; // Replace with your backend URL after deployment
+  : 'https://auth-system-backend-7rq4.onrender.com';
 
 const api = {
   /** Attach auth token from storage */
