@@ -1,12 +1,4 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/frontend/login.html" },
-    { "source": "/login.html", "destination": "/frontend/login.html" },
-    { "source": "/signup.html", "destination": "/frontend/signup.html" },
-    { "source": "/dashboard.html", "destination": "/frontend/dashboard.html" },
-    { "source": "/forgot-password.html", "destination": "/frontend/forgot-password.html" },
-    { "source": "/css/:path*", "destination": "/frontend/css/:path*" },
-    { "source": "/js/:path*", "destination": "/frontend/js/:path*" }
-  ]
+  "outputDirectory": "frontend",
+  "cleanUrls": true
 }
