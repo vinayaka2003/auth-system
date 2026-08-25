@@ -1,12 +1,10 @@
 {
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/frontend/login.html" },
-    { "source": "/login.html", "destination": "/frontend/login.html" },
-    { "source": "/signup.html", "destination": "/frontend/signup.html" },
-    { "source": "/dashboard.html", "destination": "/frontend/dashboard.html" },
-    { "source": "/forgot-password.html", "destination": "/frontend/forgot-password.html" },
-    { "source": "/css/(.*)", "destination": "/frontend/css/$1" },
-    { "source": "/js/(.*)", "destination": "/frontend/js/$1" }
+  "redirects": [
+    { "source": "/", "destination": "/frontend/login.html", "permanent": false },
+    { "source": "/login.html", "destination": "/frontend/login.html", "permanent": false },
+    { "source": "/signup.html", "destination": "/frontend/signup.html", "permanent": false },
+    { "source": "/dashboard.html", "destination": "/frontend/dashboard.html", "permanent": false },
+    { "source": "/forgot-password.html", "destination": "/frontend/forgot-password.html", "permanent": false }
   ]
 }
