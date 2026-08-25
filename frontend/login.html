@@ -1,104 +1,104 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-    <title>Login</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
-    <script
-        src="https://accounts.google.com/gsi/client"
-        async
-        defer>
-    </script>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in — AuthSystem</title>
+  <meta name="description" content="Sign in to your AuthSystem account.">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+<body class="auth-page">
 
-<body>
+<!-- Left brand panel -->
+<aside class="auth-panel">
+  <div class="panel-brand">
+    <div class="panel-logo">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <span class="panel-brand-name">AuthSystem</span>
+  </div>
 
-<div class="container">
+  <div class="panel-copy">
+    <h2 class="panel-headline">Secure authentication<br>for everyone.</h2>
+    <p class="panel-sub">A complete, production-ready auth system — email, Google, guest, and more.</p>
+    <ul class="panel-features">
+      <li><span class="feat-dot"></span>Email &amp; password sign-in</li>
+      <li><span class="feat-dot"></span>Google OAuth login</li>
+      <li><span class="feat-dot"></span>JWT-based sessions</li>
+      <li><span class="feat-dot"></span>Password reset flow</li>
+    </ul>
+  </div>
 
-    <h1>Login</h1>
+  <p class="panel-footer">AuthSystem &copy; 2026</p>
+</aside>
 
-    <div class="input-group">
-        <input
-            id="email"
-            type="email"
-            autocomplete="email"
-            placeholder="Email">
+<!-- Right form side -->
+<div class="auth-form-side">
+  <div class="auth-form-wrap">
+
+    <div class="form-head">
+      <h1>Welcome back</h1>
+      <p>Sign in to continue to your account.</p>
     </div>
 
-    <div class="input-group password-wrapper">
+    <div id="statusAlert" class="alert" role="alert" aria-live="polite"></div>
 
-        <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Password">
+    <div class="form-fields">
 
-        <button
-            type="button"
-            id="passwordToggle"
-            class="toggle-password"
-            onclick="togglePassword()"
-            aria-label="Toggle password">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+        <span class="field-msg" id="emailMsg"></span>
+      </div>
 
-            <i
-                id="eyeIcon"
-                data-lucide="eye">
-            </i>
-
-        </button>
+      <div class="field">
+        <div class="field-top">
+          <label for="password">Password</label>
+          <a href="forgot-password.html" class="field-hint">Forgot password?</a>
+        </div>
+        <div class="pw-wrap">
+          <input id="password" type="password" autocomplete="current-password" placeholder="Enter your password">
+          <button type="button" class="pw-toggle" onclick="togglePw('password','eyeLogin')" aria-label="Toggle password">
+            <i id="eyeLogin" data-lucide="eye"></i>
+          </button>
+        </div>
+        <span class="field-msg" id="pwMsg"></span>
+      </div>
 
     </div>
 
-    <button
-        id="loginBtn"
-        onclick="login()">
-        Login
+    <div class="checkbox-row">
+      <input type="checkbox" id="rememberMe">
+      <label for="rememberMe">Keep me signed in</label>
+    </div>
+
+    <button id="loginBtn" class="btn btn-primary" onclick="doLogin()">
+      <span class="spinner"></span>
+      <span class="btn-text">Sign in</span>
     </button>
 
-    <div
-        id="g_id_onload"
-        data-client_id="893702706174-p8ur1mrrpc84r29h3jsc56sq66koqqc2.apps.googleusercontent.com"
-        data-callback="handleGoogleLogin">
+    <div class="divider">or continue with</div>
+
+    <div id="g_id_onload"
+      data-client_id="893702706174-p8ur1mrrpc84r29h3jsc56sq66koqqc2.apps.googleusercontent.com"
+      data-callback="handleGoogleLogin">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <button class="btn btn-ghost" onclick="guestLogin()">Continue as Guest</button>
+
+    <div class="form-foot">
+      <span>Don't have an account? <a href="signup.html">Create one</a></span>
     </div>
 
-    <div
-        class="g_id_signin"
-        data-type="standard">
-    </div>
-
-    <br><br>
-
-    <button onclick="guestLogin()">
-        Continue as Guest
-    </button>
-
-    <p>
-        <a href="forgot-password.html">
-            Forgot Password?
-        </a>
-    </p>
-
-    <p>
-        Don't have an account?
-        <a href="signup.html">
-            Signup
-        </a>
-    </p>
-
+  </div>
 </div>
 
+<script src="js/api.js"></script>
+<script src="js/toast.js"></script>
 <script src="js/login.js"></script>
-
-<script>
-    lucide.createIcons();
-</script>
-
+<script>lucide.createIcons();</script>
 </body>
-
 </html>

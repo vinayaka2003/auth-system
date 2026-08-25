@@ -1,194 +1,117 @@
-async function login() {
+/* ── Utilities ─────────────────────────────────────────────── */
 
-    const btn =
-        document.getElementById("loginBtn");
-
-    const container =
-        document.querySelector(".container");
-
-    btn.disabled = true;
-    btn.innerText = "Logging in...";
-
-    container.classList.add("loading");
-
-    try {
-
-        const data = {
-            email:
-                document.getElementById("email").value,
-
-            password:
-                document.getElementById("password").value
-        };
-
-        const response = await fetch(
-            "http://127.0.0.1:8000/login",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify(data)
-            }
-        );
-
-        const result =
-            await response.json();
-
-        if (result.access_token) {
-
-            localStorage.setItem(
-                "token",
-                result.access_token
-            );
-
-            window.location.href =
-                "dashboard.html";
-
-        } else {
-
-            alert(
-                result.detail ||
-                "Something went wrong"
-            );
-        }
-
-    } catch (error) {
-
-        alert(
-            "Server error. Please try again."
-        );
-
-    } finally {
-
-        container.classList.remove(
-            "loading"
-        );
-
-        btn.disabled = false;
-
-        btn.innerText = "Login";
-    }
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = loading;
+  btn.classList.toggle('loading', loading);
 }
 
-
-/* PASSWORD TOGGLE */
-
-function togglePassword() {
-
-    const passwordInput =
-        document.getElementById(
-            "password"
-        );
-
-    const eyeIcon =
-        document.getElementById(
-            "eyeIcon"
-        );
-
-    if (
-        passwordInput.type ===
-        "password"
-    ) {
-
-        passwordInput.type =
-            "text";
-
-        eyeIcon.setAttribute(
-            "data-lucide",
-            "eye-off"
-        );
-
-    } else {
-
-        passwordInput.type =
-            "password";
-
-        eyeIcon.setAttribute(
-            "data-lucide",
-            "eye"
-        );
-    }
-
-    lucide.createIcons();
+function showAlert(msg, isError) {
+  const el = document.getElementById('statusAlert');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'alert ' + (isError ? 'error' : 'success');
 }
 
-
-/* GOOGLE LOGIN */
-
-async function handleGoogleLogin(
-    response
-) {
-
-    const googleToken =
-        response.credential;
-
-    try {
-
-        const backendResponse =
-            await fetch(
-                "http://127.0.0.1:8000/google-login",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        token:
-                            googleToken
-                    })
-                }
-            );
-
-        const result =
-            await backendResponse.json();
-
-        if (result.access_token) {
-
-            localStorage.setItem(
-                "token",
-                result.access_token
-            );
-
-            window.location.href =
-                "dashboard.html";
-
-        } else {
-
-            alert(
-                result.detail ||
-                "Google login failed"
-            );
-        }
-
-    } catch (error) {
-
-        alert(
-            "Google login failed"
-        );
-    }
+function fieldError(inputId, msgId, msg) {
+  const input = document.getElementById(inputId);
+  const msgEl = document.getElementById(msgId);
+  if (input) { input.classList.remove('valid'); input.classList.add('invalid'); }
+  if (msgEl) { msgEl.textContent = msg; msgEl.className = 'field-msg err'; }
 }
 
+function fieldOk(inputId, msgId, msg = '') {
+  const input = document.getElementById(inputId);
+  const msgEl = document.getElementById(msgId);
+  if (input) { input.classList.remove('invalid'); input.classList.add('valid'); }
+  if (msgEl) { msgEl.textContent = msg; msgEl.className = 'field-msg ok'; }
+}
 
-/* GUEST LOGIN */
+function fieldReset(inputId, msgId) {
+  const input = document.getElementById(inputId);
+  const msgEl = document.getElementById(msgId);
+  if (input) { input.classList.remove('valid','invalid'); }
+  if (msgEl) { msgEl.textContent = ''; msgEl.className = 'field-msg'; }
+}
 
+function togglePw(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon  = document.getElementById(iconId);
+  if (!input) return;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  if (icon) { icon.setAttribute('data-lucide', show ? 'eye-off' : 'eye'); lucide.createIcons(); }
+}
+
+/* ── Auto-redirect if already logged in ────────────────────── */
+if (api.isLoggedIn()) window.location.replace('dashboard.html');
+
+/* ── Live validation ────────────────────────────────────────── */
+const emailInput = document.getElementById('email');
+const pwInput    = document.getElementById('password');
+
+emailInput?.addEventListener('blur', () => {
+  const v = emailInput.value.trim();
+  if (!v)                         fieldReset('email','emailMsg');
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) fieldError('email','emailMsg','Enter a valid email address.');
+  else                            fieldOk('email','emailMsg');
+});
+
+pwInput?.addEventListener('blur', () => {
+  const v = pwInput.value;
+  if (!v)           fieldReset('password','pwMsg');
+  else if (v.length < 6) fieldError('password','pwMsg','Password must be at least 6 characters.');
+  else              fieldOk('password','pwMsg');
+});
+
+/* ── Login ─────────────────────────────────────────────────── */
+async function doLogin() {
+  const email    = document.getElementById('email')?.value.trim();
+  const password = document.getElementById('password')?.value;
+  const remember = document.getElementById('rememberMe')?.checked;
+
+  let valid = true;
+  if (!email)    { fieldError('email','emailMsg','Email is required.'); valid = false; }
+  if (!password) { fieldError('password','pwMsg','Password is required.'); valid = false; }
+  if (!valid) return;
+
+  setLoading('loginBtn', true);
+
+  const { ok, data, error } = await api.login(email, password);
+
+  setLoading('loginBtn', false);
+
+  if (ok && data.access_token) {
+    api.saveToken(data.access_token, remember);
+    toast.success('Signed in', 'Redirecting to your dashboard…');
+    setTimeout(() => window.location.replace('dashboard.html'), 900);
+  } else {
+    showAlert(error, true);
+    toast.error('Sign in failed', error);
+  }
+}
+
+/* ── Google login ───────────────────────────────────────────── */
+async function handleGoogleLogin(response) {
+  const { ok, data, error } = await api.googleLogin(response.credential);
+  if (ok && data.access_token) {
+    api.saveToken(data.access_token, true);
+    toast.success('Signed in with Google');
+    setTimeout(() => window.location.replace('dashboard.html'), 900);
+  } else {
+    toast.error('Google sign-in failed', error);
+  }
+}
+
+/* ── Guest ──────────────────────────────────────────────────── */
 function guestLogin() {
-
-    localStorage.removeItem(
-        "token"
-    );
-
-    localStorage.setItem(
-        "guest",
-        "true"
-    );
-
-    window.location.href =
-        "dashboard.html";
+  api.clearToken();
+  localStorage.setItem('guest', 'true');
+  window.location.replace('dashboard.html');
 }
+
+/* ── Enter key ──────────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});

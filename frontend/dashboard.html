@@ -1,23 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — AuthSystem</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="dash">
 
-<h1>Dashboard</h1>
+<header class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <span class="nav-title">AuthSystem</span>
+  </div>
+  <div class="nav-right">
+    <div class="nav-avatar" id="navAvatar">—</div>
+    <button class="btn-signout" onclick="logout()">Sign out</button>
+  </div>
+</header>
 
-<h2 id="welcome">Loading...</h2>
+<main class="dash-main">
 
-<p>Email: <span id="email">Loading...</span></p>
+  <div class="greeting">
+    <div class="greeting-eye">Dashboard</div>
+    <h1 id="welcomeMsg">Loading…</h1>
+    <p id="welcomeSub">Fetching your account details.</p>
+  </div>
 
-<p>Verified: <span id="verified">Loading...</span></p>
+  <div class="info-grid">
+    <div class="info-card skeleton" id="cardEmail">
+      <div class="info-label">Email address</div>
+      <div class="info-value" id="infoEmail">—</div>
+    </div>
+    <div class="info-card skeleton" id="cardVerified">
+      <div class="info-label">Verification</div>
+      <div class="info-value" id="infoVerified">—</div>
+    </div>
+    <div class="info-card skeleton" id="cardProvider">
+      <div class="info-label">Login method</div>
+      <div class="info-value" id="infoProvider">—</div>
+    </div>
+    <div class="info-card skeleton" id="cardStatus">
+      <div class="info-label">Account status</div>
+      <div class="info-value" id="infoStatus">—</div>
+    </div>
+  </div>
 
-<button onclick="logout()">
-    Logout
-</button>
+</main>
 
+<script src="js/api.js"></script>
+<script src="js/toast.js"></script>
 <script src="js/dashboard.js"></script>
-
 </body>
 </html>
