@@ -1,10 +1,8 @@
 {
-  "cleanUrls": true,
-  "redirects": [
-    { "source": "/", "destination": "/frontend/login.html", "permanent": false },
-    { "source": "/login.html", "destination": "/frontend/login.html", "permanent": false },
-    { "source": "/signup.html", "destination": "/frontend/signup.html", "permanent": false },
-    { "source": "/dashboard.html", "destination": "/frontend/dashboard.html", "permanent": false },
-    { "source": "/forgot-password.html", "destination": "/frontend/forgot-password.html", "permanent": false }
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
+    }
   ]
 }
